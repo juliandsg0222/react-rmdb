@@ -20,15 +20,18 @@ const apiSettings = {
     const endpoint = searchTerm
       ? `${SEARCH_BASE_URL}${searchTerm}&page=${page}`
       : `${POPULAR_BASE_URL}&page=${page}`;
-    return await (await fetch(endpoint)).json();
+    const answer = await (await fetch(endpoint)).json();
+    return answer;
   },
   fetchMovie: async (movieId) => {
     const endpoint = `${API_URL}movie/${movieId}?api_key=${API_KEY}`;
-    return await (await fetch(endpoint)).json();
+    const answer = await (await fetch(endpoint)).json();
+    return answer;
   },
   fetchCredits: async (movieId) => {
     const creditsEndpoint = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}`;
-    return await (await fetch(creditsEndpoint)).json();
+    const answer = await (await fetch(creditsEndpoint)).json();
+    return answer;
   },
   // Bonus material below for login
   getRequestToken: async () => {
@@ -49,15 +52,16 @@ const apiSettings = {
       })
     ).json();
     // Then get the sessionId with the requestToken
+    let sessionId;
     if (data.success) {
-      const sessionId = await (
+      sessionId = await (
         await fetch(SESSION_ID_URL, {
           ...defaultConfig,
           body: JSON.stringify({ request_token: requestToken }),
         })
       ).json();
-      return sessionId;
     }
+    return sessionId;
   },
   rateMovie: async (sessionId, movieId, value) => {
     const endpoint = `${API_URL}movie/${movieId}/rating?api_key=${API_KEY}&session_id=${sessionId}`;
